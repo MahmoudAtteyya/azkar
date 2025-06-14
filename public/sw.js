@@ -1,6 +1,10 @@
 // Service Worker for Azkar App
 const CACHE_NAME = 'azkar-cache-v1';
 
+// This is the service worker with the Cache-first network
+// Add this below to the "catch" handler
+self.__WB_MANIFEST;
+
 // Install event - cache assets
 self.addEventListener('install', (event) => {
   event.waitUntil(

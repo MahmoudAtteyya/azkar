@@ -71,7 +71,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       strategies: 'injectManifest',
       srcDir: 'public',
-      filename: 'sw.js'
+      filename: 'sw.js',
+      injectManifest: {
+        injectionPoint: 'self.__WB_MANIFEST'
+      }
     })
   ]
 });
