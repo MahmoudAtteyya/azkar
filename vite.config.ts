@@ -66,15 +66,12 @@ export default defineConfig({
           }
         ],
         cleanupOutdatedCaches: true,
-        sourcemap: true
+        sourcemap: true,
+        clientsClaim: true,
+        skipWaiting: true
       },
       registerType: 'autoUpdate',
-      strategies: 'injectManifest',
-      srcDir: 'public',
-      filename: 'sw.js',
-      injectManifest: {
-        injectionPoint: 'self.__WB_MANIFEST'
-      }
+      strategies: 'generateSW'
     })
   ]
 });

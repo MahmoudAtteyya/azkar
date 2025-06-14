@@ -25,15 +25,26 @@ self.addEventListener('install', (event) => {
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    Promise.all([
+      // Clean up old caches
+      caches.keys().then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => {
+            if (cacheName !== CACHE_NAME) {
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      }),
+      // Start scheduling notifications
+      scheduleNotifications(),
+      // Request notification permission
+      self.registration.showNotification('تطبيق الأذكار', {
+        body: 'تم تفعيل الإشعارات بنجاح',
+        icon: '/icons/app-icon.png',
+        badge: '/icons/app-icon.png'
+      })
+    ])
   );
 });
 
@@ -135,20 +146,4 @@ function scheduleNotifications() {
     // Reschedule for next day
     scheduleNotifications();
   }, eveningTime.getTime() - now.getTime());
-}
-
-// Start scheduling notifications when service worker activates
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    Promise.all([
-      // Start scheduling notifications
-      scheduleNotifications(),
-      // Request notification permission
-      self.registration.showNotification('تطبيق الأذكار', {
-        body: 'تم تفعيل الإشعارات بنجاح',
-        icon: '/icons/app-icon.png',
-        badge: '/icons/app-icon.png'
-      })
-    ])
-  );
-}); 
+} 
